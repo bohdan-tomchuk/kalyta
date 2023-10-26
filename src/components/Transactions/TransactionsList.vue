@@ -1,29 +1,49 @@
-<script setup lang="ts">
-import { ref } from 'vue'
-import mock from './mockTransactions'
-import TransactionItem from './TransactionItem'
+<script lang="ts">
+import TransactionItem from './TransactionItem.ts'
+import { useTransactionsStore } from '@/stores/transactionsStore.ts'
+import { defineComponent, ref } from 'vue'
+import FormDirector from '@/components/Form/FormDirector'
+import FormBuilder from '@/components/Form/FormBuilder'
 
-// const props = defineProps({
-//   mode: {
-//     type: String,
-//     required: true
-//   }
-// })
+export default defineComponent({
+  name: 'TransactionsList',
+  components: {
+    TransactionItem,
+    CreateTransactionForm: new FormDirector(new FormBuilder()).makeCreateTransactionForm()
+  },
+  setup() {
+    const modal = ref(false)
 
-const transactions = ref([...mock])
+    const store = useTransactionsStore()
+
+    store.fetchTransactions()
+
+    return {
+      modal,
+      store,
+    }
+  },
+})
+
 </script>
 
 <template>
   <div class="transactions">
     <div class="transactions__header">
       <h2 class="transactions__title">Transactions</h2>
-      <el-button type="primary" class="transactions__btn">+</el-button>
+      <el-button @click="modal = true" type="primary" class="transactions__btn">+</el-button>
     </div>
     <div class="transactions__list">
-      <template v-for="(item, idx) in transactions" :key="idx">
-        <TransactionItem v-if="idx <= 9" :name="item.name" :value="item.value" :type="item.type" />
+      <template v-for="(item, idx) in store.transactions" :key="idx">
+        <TransactionItem v-if="idx <= 9" :name="item.name" :value="item.amount" :type="item.type" :id="item.id" />
       </template>
     </div>
+    <el-dialog
+      v-model="modal"
+      width="30%"
+    >
+      <CreateTransactionForm />
+    </el-dialog>
   </div>
 </template>
 
@@ -55,9 +75,8 @@ const transactions = ref([...mock])
 
 .transaction {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 10px;
+  padding: 10px 20px;
   border-radius: 4px;
   background-color: #525252;
   color: #fff;
@@ -69,11 +88,11 @@ const transactions = ref([...mock])
   }
 
   &__name {
-    margin: 0;
+    margin: 0 auto 0 0;
   }
 
   &__value {
-    margin: 0;
+    margin: 0 20px 0 0;
   }
 }
 </style>

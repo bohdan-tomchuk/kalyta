@@ -69,14 +69,17 @@ export default defineComponent({
 <template>
   <el-form>
     <template v-for="(field, idx) in fields" :key="field.name">
-      <component
-        :id="field.name"
-        :is="field.component"
-        :type="field.type"
-        v-bind="{ ...field.props, ...field.attrs }"
-        :model-value="values[field.name]"
-        @update:modelValue="onChangeHandler($event, field.name, idx)"
-      />
+      <label>
+        <span>{{ field.label }}</span>
+        <component
+          :id="field.name"
+          :is="field.component"
+          :type="field.type"
+          v-bind="{ ...field.props, ...field.attrs }"
+          :model-value="values[field.name]"
+          @update:modelValue="onChangeHandler($event, field.name, idx)"
+        />
+      </label>
     </template>
     <el-button type="primary" @click="submit">Submit</el-button>
   </el-form>
