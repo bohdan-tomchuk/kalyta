@@ -9,8 +9,9 @@ const props = defineProps({
     default: null,
     type: [String, Boolean, Number],
   },
-  data: {
+  options: {
     default: null,
+    type: Array,
   },
   name: {
     default: null,
@@ -33,11 +34,17 @@ function onInput(event: any) {
 
 <template>
   <el-form-item>
-    <el-input
-      :name="props.name"
-      :type="props.type"
-      :modelValue="props.modelValue"
-      @input="onInput" 
-    />
+    <el-select 
+    :modelValue="props.modelValue"
+    placeholder="Select"
+    @change="onInput"
+  >
+      <el-option
+        v-for="item in props.options"
+        :key="item.value"
+        :label="item.label"
+        :value="item.value"
+      />
+    </el-select>
   </el-form-item>
 </template>

@@ -18,13 +18,15 @@ export interface Field {
 export default class FormBuilder {
   fields: Field[];
   provider: any;
+  providerProps?: string;
 
   constructor() {
     this.fields = [];
   }
 
-  addProvider(provider: any) {
+  addProvider(provider: any, props?: string) {
     this.provider = provider;
+    if (props) this.providerProps = props;
     return this;
   }
 
@@ -36,17 +38,18 @@ export default class FormBuilder {
   build() {
     const Fields = this.fields;
     const Provider = this.provider;
+    const ProviderProps = this.providerProps;
 
     return defineComponent({
       props: {
-        id: {
-          default: null,
-          type: String || Number,
-        },
+        data: {
+          type: Object,
+          default: () => ({})
+        }
       },
       render(): VNode {
-        return h(Provider, () => [
-          h(FormFactory, { fields: Fields, id: this.id })
+        return h(Provider, { mode: ProviderProps }, () => [
+          h(FormFactory, { fields: Fields, data: this.data })
         ])
       },
     });

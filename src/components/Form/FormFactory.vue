@@ -9,9 +9,9 @@ export interface DataStructure {
 
 export default defineComponent({
   props: {
-    id: {
-      type: [String, Number],
-      default: null
+    data: {
+      type: Object,
+      default: () => ({})
     },
     fields: {
       type: Array as PropType<Field[]>,
@@ -21,7 +21,7 @@ export default defineComponent({
   },
   setup() {
     return {
-      submitMethod: inject<(data: any) => Promise<void>>('submitMethod')
+      submitMethod: inject<(data: any, id?: string) => Promise<void>>('submitMethod')
     }
   },
   data(): DataStructure {
@@ -47,14 +47,17 @@ export default defineComponent({
       }
     })
     this.values = values
+
+    if (this.data) {
+      Object.assign(this.values, this.data)
+    }
   },
   methods: {
     async submit() {
       // if (this.submitable) {
       //   console.log('submit')
       // }
-      console.log('submit')
-      this.submitMethod!(this.values)
+      this.submitMethod!(this.values, this.data.id)
     },
     onChangeHandler(payload: any, fieldName: string, fieldNumber: number) {
       // const validator = this.fields[fieldNumber].validation;
@@ -69,14 +72,17 @@ export default defineComponent({
 <template>
   <el-form>
     <template v-for="(field, idx) in fields" :key="field.name">
-      <component
-        :id="field.name"
-        :is="field.component"
-        :type="field.type"
-        v-bind="{ ...field.props, ...field.attrs }"
-        :model-value="values[field.name]"
-        @update:modelValue="onChangeHandler($event, field.name, idx)"
-      />
+      <label>
+        <span>{{ field.label }}</span>
+        <component
+          :id="field.name"
+          :is="field.component"
+          :type="field.type"
+          v-bind="{ ...field.props, ...field.attrs }"
+          :model-value="values[field.name]"
+          @update:modelValue="onChangeHandler($event, field.name, idx)"
+        />
+      </label>
     </template>
     <el-button type="primary" @click="submit">Submit</el-button>
   </el-form>

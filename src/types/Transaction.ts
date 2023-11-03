@@ -1,6 +1,10 @@
-export type Transaction = {
+// enum TransactionType {
+//   INCOME = 'income',
+//   EXPENSE = 'expense',
+// }
+export interface ITransaction {
   name: string;
-  value: number;
-  id: string;
+  amount: number;
+  id?: string;
   type: string;
 }
