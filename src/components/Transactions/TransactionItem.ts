@@ -1,13 +1,15 @@
 import { h } from "vue"
 import { useTransactionsStore } from "@/stores/transactionsStore"
-import { ElButton } from "element-plus"
+import { ElButton, ElPopconfirm } from "element-plus"
 import { Delete } from '@element-plus/icons-vue'
+import EditTransactionDialog from "./EditTransactionDialog.vue"
 
 type FComponentProps = {
   name: string
   value: number
   type: string
-  id: string
+  id: string,
+  index: number
 }
 
 const store = useTransactionsStore()
@@ -21,7 +23,19 @@ const TransactionItem = (props: FComponentProps) => {
     [
       h('div', { class: 'transaction__name' }, props.name),
       h('div', { class: 'transaction__value' }, (props.type === 'expense' ? '-' : '+' ) + props.value + '$'),
-      h(ElButton, { class: 'transaction__delete', icon: Delete, onClick: () => store.removeTransaction(props.id) })
+      h(ElPopconfirm, { title: 'Are you shure to delete ?', onConfirm: () => store.removeTransaction(props.id, props.index)}, {
+        reference: () => h(ElButton, { 
+          class: 'transaction__delete', 
+          icon: Delete,
+          type: 'danger'
+        })
+      }),
+      h(EditTransactionDialog, { data: { 
+        name: props.name, 
+        amount: props.value, 
+        type: props.type, 
+        id: props.id
+       } })
     ]
   )
 }

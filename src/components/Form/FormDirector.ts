@@ -1,7 +1,9 @@
 import FormInput from './inputs/FormInput.vue'
+import FormSelect from './inputs/FormSelect.vue'
 import type FormBuilder from './FormBuilder.ts'
 import LoginProvider from './providers/LoginProvider.vue'
-import CreateTransactionProvider from './providers/CreateTransactionProvider.vue'
+import TransactionProvider from './providers/TransactionProvider.vue'
+import type { ITransaction } from '@/types/Transaction';
 
 export default class FormDirector {
   builder: FormBuilder;
@@ -34,16 +36,16 @@ export default class FormDirector {
       .build();
   }
 
-  makeCreateTransactionForm() {
+  makeTransactionForm(mode: string, data?: ITransaction) {
     return this.builder
-      .addProvider(CreateTransactionProvider)
+      .addProvider(TransactionProvider, mode)
       .addField({
         component: FormInput,
         name: 'name',
         type: 'text',
         label: 'Name',
         props: {
-          value: ''
+          value: data?.name || ''
         }
       })
       .addField({
@@ -52,16 +54,16 @@ export default class FormDirector {
         type: 'number',
         label: 'Amount',
         props: {
-          value: ''
+          value: data?.amount || ''
         }
       })
       .addField({
-        component: FormInput,
+        component: FormSelect,
         name: 'type',
         type: 'select',
         label: 'Type',
         props: {
-          value: '',
+          value: data?.type || '',
           options: [
             { label: 'Expense', value: 'expense' },
             { label: 'Income', value: 'income' }

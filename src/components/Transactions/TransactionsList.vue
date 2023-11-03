@@ -9,7 +9,7 @@ export default defineComponent({
   name: 'TransactionsList',
   components: {
     TransactionItem,
-    CreateTransactionForm: new FormDirector(new FormBuilder()).makeCreateTransactionForm()
+    CreateTransactionForm: new FormDirector(new FormBuilder()).makeTransactionForm('create')
   },
   setup() {
     const modal = ref(false)
@@ -35,7 +35,7 @@ export default defineComponent({
     </div>
     <div class="transactions__list">
       <template v-for="(item, idx) in store.transactions" :key="idx">
-        <TransactionItem v-if="idx <= 9" :name="item.name" :value="item.amount" :type="item.type" :id="item.id" />
+        <TransactionItem v-if="idx <= 9" :name="item.name" :value="item.amount" :type="item.type" :id="item.id" :index="idx" />
       </template>
     </div>
     <el-dialog
