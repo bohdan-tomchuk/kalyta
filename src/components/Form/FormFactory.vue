@@ -30,14 +30,6 @@ export default defineComponent({
       values: {}
     }
   },
-  // computed: {
-  //   submitable() {
-  //     const errors: number = [...Object.keys(this.errors)].filter(
-  //       (i) => this.errors[i] != undefined
-  //     ).length
-  //     return errors === 0
-  //   }
-  // },
   created() {
     const values: any = {}
     this.fields.forEach(({ name, props }) => {
@@ -54,15 +46,9 @@ export default defineComponent({
   },
   methods: {
     async submit() {
-      // if (this.submitable) {
-      //   console.log('submit')
-      // }
       this.submitMethod!(this.values, this.data.id)
     },
-    onChangeHandler(payload: any, fieldName: string, fieldNumber: number) {
-      // const validator = this.fields[fieldNumber].validation;
-      // const { valid, message } = this.validate(payload, validator);
-      // this.throwErrors(fieldName, valid, message);
+    onChangeHandler(payload: any, fieldName: string) {
       this.values[fieldName] = payload
     },
   }
@@ -71,7 +57,7 @@ export default defineComponent({
 
 <template>
   <el-form>
-    <template v-for="(field, idx) in fields" :key="field.name">
+    <template v-for="field in fields" :key="field.name">
       <label>
         <span>{{ field.label }}</span>
         <component
@@ -80,7 +66,7 @@ export default defineComponent({
           :type="field.type"
           v-bind="{ ...field.props, ...field.attrs }"
           :model-value="values[field.name]"
-          @update:modelValue="onChangeHandler($event, field.name, idx)"
+          @update:modelValue="onChangeHandler($event, field.name)"
         />
       </label>
     </template>
