@@ -1,4 +1,10 @@
 <script setup lang="ts">
+import { type PropType } from "vue";
+
+interface IOption {
+  label: string;
+  value: string | number;
+}
 
 const props = defineProps({
   type: {
@@ -11,7 +17,7 @@ const props = defineProps({
   },
   options: {
     default: null,
-    type: Array,
+    type: Array as PropType<IOption[]>,
   },
   name: {
     default: null,

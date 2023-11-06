@@ -1,10 +1,4 @@
-// enum TransactionType {
-//   INCOME = 'income',
-//   EXPENSE = 'expense',
-// }
-export interface ITransaction {
-  name: string;
-  amount: number;
-  id?: string;
-  type: string;
-}
+import { type Database } from '@/types/supabase'
+export type Transaction = Database['public']['Tables']['transactions']['Row']
+export type TransactionInsert = Database['public']['Tables']['transactions']['Insert']
+export type TransactionUpdate = Database['public']['Tables']['transactions']['Update']

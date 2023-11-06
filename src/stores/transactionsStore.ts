@@ -1,18 +1,14 @@
 //pinia store
 import { defineStore } from 'pinia'
-import type { ITransaction } from '@/types/Transaction'
+import type { Transaction, TransactionInsert, TransactionUpdate } from '@/types/Transaction'
 import { supabase } from '@/lib/supabase'
-import type { PostgrestError } from '@supabase/postgrest-js'
 import { ElNotification } from 'element-plus'
 
 export const useTransactionsStore = defineStore("transactions", {
   state: () => ({
-    transactions: [] as ITransaction[],
+    transactions: [] as Transaction[],
     loading: false
   }),
-  getters: {
-    getTransactions: (state) => state.transactions
-  },
   actions: {
     async removeTransaction (id: string, idx: number) {
       const { error } = await supabase
@@ -35,7 +31,7 @@ export const useTransactionsStore = defineStore("transactions", {
         this.transactions.splice(idx, 1)
       }
     },
-    async createTransaction (data: ITransaction) {
+    async createTransaction (data: TransactionInsert) {
       const { data: response, error } = await supabase.from('transactions').insert([data]).select()
 
       if (error) {
@@ -54,7 +50,7 @@ export const useTransactionsStore = defineStore("transactions", {
         this.transactions.push(response[0])
       }
     },
-    async editTransaction (data: ITransaction, id: string) {
+    async editTransaction (data: TransactionUpdate, id: string) {
       const { data: response, error } = await supabase
         .from('transactions')
         .update(data)
@@ -88,7 +84,7 @@ export const useTransactionsStore = defineStore("transactions", {
           type: 'error'
         })
       } else {
-        this.transactions = transactionsList as ITransaction[]
+        this.transactions = transactionsList
       }
     }
   }

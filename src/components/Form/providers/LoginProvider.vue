@@ -11,7 +11,7 @@ export default defineComponent({
   name: 'LoginProvider',
   provide() {
     return {
-      submitMethod: async (data: IAuthCredentials): Promise<void> => {
+      submitMethod: async (data: IAuthCredentials) => {
         const { data: response, error } = await supabase.auth.signInWithPassword(data)
         if (error) {
           console.log(error)

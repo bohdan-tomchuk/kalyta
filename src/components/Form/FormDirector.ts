@@ -1,9 +1,9 @@
 import FormInput from './inputs/FormInput.vue'
 import FormSelect from './inputs/FormSelect.vue'
-import type FormBuilder from './FormBuilder.ts'
+import type FormBuilder from './FormBuilder'
 import LoginProvider from './providers/LoginProvider.vue'
 import TransactionProvider from './providers/TransactionProvider.vue'
-import type { ITransaction } from '@/types/Transaction';
+import type { TransactionUpdate } from '@/types/Transaction';
 
 export default class FormDirector {
   builder: FormBuilder;
@@ -36,7 +36,7 @@ export default class FormDirector {
       .build();
   }
 
-  makeTransactionForm(mode: string, data?: ITransaction) {
+  makeTransactionForm(mode: 'edit' | 'create', data?: TransactionUpdate) {
     return this.builder
       .addProvider(TransactionProvider, mode)
       .addField({

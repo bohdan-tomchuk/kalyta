@@ -13,9 +13,6 @@ import FormBuilder from '@/components/Form/FormBuilder'
 export default defineComponent({
   components: {
     LoginForm: new FormDirector(new FormBuilder()).makeLoginForm()
-  },
-  setup() {
-
   }
 })
 </script>

@@ -1,8 +1,9 @@
 <script lang="ts">
-import { ref, defineComponent } from 'vue'
+import { ref, defineComponent, type PropType } from 'vue'
 import FormBuilder from '@/components/Form/FormBuilder'
 import FormDirector from '@/components/Form/FormDirector'
 import { Edit } from '@element-plus/icons-vue'
+import type { TransactionUpdate } from '@/types/Transaction'
 
 export default defineComponent({
   components: {
@@ -10,8 +11,8 @@ export default defineComponent({
   },
   props: {
     data: {
-      type: Object,
-      default: () => ({})
+      type: Object as PropType<TransactionUpdate>,
+      required: true
     },
   },
   setup() {
