@@ -1,7 +1,7 @@
 <template>
   <div class="form">
     <h2>Login</h2>
-    <LoginForm />
+    <LoginForm :submitMethod="login"/>
   </div>
 </template>
 
@@ -9,10 +9,18 @@
 import { defineComponent } from 'vue'
 import FormDirector from '@/components/Form/FormDirector'
 import FormBuilder from '@/components/Form/FormBuilder'
+import { useUserStore } from '@/stores/userStore'
 
 export default defineComponent({
   components: {
     LoginForm: new FormDirector(new FormBuilder()).makeLoginForm()
+  },
+  setup() {
+    const { login } = useUserStore()
+
+    return {
+      login
+    }
   }
 })
 </script>

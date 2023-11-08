@@ -1,4 +1,4 @@
-import { defineComponent, h, type VNode } from "vue";
+import { defineComponent, h, type VNode, type PropType } from "vue";
 import FormFactory from "./FormFactory.vue";
 
 export interface ObjectGeneric {
@@ -17,17 +17,9 @@ export interface Field {
 
 export default class FormBuilder {
   fields: Field[];
-  provider: any;
-  providerProps?: string;
 
   constructor() {
     this.fields = [];
-  }
-
-  addProvider(provider: any, props?: string) {
-    this.provider = provider;
-    if (props) this.providerProps = props;
-    return this;
   }
 
   addField(field: Field) {
@@ -37,20 +29,20 @@ export default class FormBuilder {
 
   build() {
     const Fields = this.fields;
-    const Provider = this.provider;
-    const ProviderProps = this.providerProps;
 
     return defineComponent({
       props: {
         data: {
           type: Object,
           default: () => ({})
+        },
+        submitMethod: {
+          type: Function as PropType<(data: any) => Promise<void>>,
+          required: true
         }
       },
       render(): VNode {
-        return h(Provider, { mode: ProviderProps }, () => [
-          h(FormFactory, { fields: Fields, data: this.data })
-        ])
+        return h(FormFactory, { fields: Fields, data: this.data, submitMethod: this.submitMethod })
       },
     });
   }

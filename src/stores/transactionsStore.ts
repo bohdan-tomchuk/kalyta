@@ -11,36 +11,37 @@ export const useTransactionsStore = defineStore("transactions", {
   }),
   actions: {
     async removeTransaction (id: string, idx: number) {
-      const { error } = await supabase
-        .from('transactions')
-        .delete()
-        .eq('id', id)
-      if (error) {
-        ElNotification({
-          title: 'Error',
-          message: error.message,
-          type: 'error'
-        })
-      } else {
+      try {
+        const { error } = await supabase
+          .from('transactions')
+          .delete()
+          .eq('id', id)
+
+        if (error) throw error
+
         ElNotification({
           title: 'Success',
           message: 'Transaction deleted',
           type: 'success'
         })
-        // delete item from transactions by idx
         this.transactions.splice(idx, 1)
+      } catch (error) {
+        if (error instanceof Error) {
+          ElNotification({
+            title: 'Error',
+            message: error.message,
+            type: 'error'
+          })
+        } else {
+          console.log(error)
+        }
       }
     },
     async createTransaction (data: TransactionInsert) {
-      const { data: response, error } = await supabase.from('transactions').insert([data]).select()
+      try {
+        const { data: response, error } = await supabase.from('transactions').insert([data]).select()
 
-      if (error) {
-        ElNotification({
-          title: 'Error',
-          message: error.message,
-          type: 'error'
-        })
-      } else {
+        if (error) throw error
         ElNotification({
           title: 'Success',
           message: 'Transaction created',
@@ -48,21 +49,30 @@ export const useTransactionsStore = defineStore("transactions", {
         })
 
         this.transactions.push(response[0])
+      } catch (error) {
+        if (error instanceof Error) {
+          ElNotification({
+            title: 'Error',
+            message: error.message,
+            type: 'error'
+          })
+        } else {
+          console.log(error)
+        }
       }
     },
-    async editTransaction (data: TransactionUpdate, id: string) {
-      const { data: response, error } = await supabase
-        .from('transactions')
-        .update(data)
-        .eq('id', id)
-        .select()
-      if (error) {
-        ElNotification({
-          title: 'Error',
-          message: error.message,
-          type: 'error'
-        })
-      } else {
+    async editTransaction (data: TransactionUpdate): Promise<void> {
+      const { id } = data
+      if (typeof id === 'undefined') throw new Error('id is undefined')
+      try {
+        const { data: response, error } = await supabase
+          .from('transactions')
+          .update(data)
+          .eq('id', id)
+          .select()
+        
+        if (error) throw error
+
         ElNotification({
           title: 'Success',
           message: 'Transaction updated',
@@ -70,21 +80,38 @@ export const useTransactionsStore = defineStore("transactions", {
         })
         const idx = this.transactions.findIndex((transaction) => transaction.id === id)
         this.transactions[idx] = response[0]
+      } catch (error) {
+        if (error instanceof Error) {
+          ElNotification({
+            title: 'Error',
+            message: error.message,
+            type: 'error'
+          })
+        } else {
+          console.log(error)
+        }
       }
     },
     async fetchTransactions () {
-      const { data: transactionsList, error } = await supabase
-        .from('transactions')
-        .select('*')
-        .order('date', { ascending: false })
-      if (error) {
-        ElNotification({
-          title: 'Error',
-          message: error.message,
-          type: 'error'
-        })
-      } else {
-        this.transactions = transactionsList
+      try {
+        const { data, error } = await supabase
+          .from('transactions')
+          .select('*')
+          .order('date', { ascending: false })
+
+        if (error) throw error
+
+        this.transactions = data
+      } catch (error) {
+        if (error instanceof Error) {
+          ElNotification({
+            title: 'Error',
+            message: error.message,
+            type: 'error'
+          })
+        } else {
+          console.log(error)
+        }
       }
     }
   }

@@ -1,13 +1,7 @@
 <script setup lang="ts">
-import { supabase } from '../../lib/supabase'
-import { useRouter } from 'vue-router'
+import { useUserStore } from '@/stores/userStore'
 
-const router = useRouter()
-
-function logout () {
-  supabase.auth.signOut()
-  router.push({ path: '/login' })
-}
+const { logout } = useUserStore()
 </script>
 
 <template>
