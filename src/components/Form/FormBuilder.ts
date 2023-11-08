@@ -1,5 +1,6 @@
 import { defineComponent, h, type VNode, type PropType } from "vue";
 import FormFactory from "./FormFactory.vue";
+import type { FormRules } from "element-plus"
 
 export interface ObjectGeneric {
   [keys: string]: any;
@@ -17,9 +18,11 @@ export interface Field {
 
 export default class FormBuilder {
   fields: Field[];
+  rules: FormRules;
 
   constructor() {
     this.fields = [];
+    this.rules = {};
   }
 
   addField(field: Field) {
@@ -27,8 +30,14 @@ export default class FormBuilder {
     return this;
   }
 
+  addRules(rules: FormRules) {
+    this.rules = rules;
+    return this;
+  }
+
   build() {
-    const Fields = this.fields;
+    const Fields = this.fields
+    const Rules = this.rules
 
     return defineComponent({
       props: {
@@ -42,7 +51,12 @@ export default class FormBuilder {
         }
       },
       render(): VNode {
-        return h(FormFactory, { fields: Fields, data: this.data, submitMethod: this.submitMethod })
+        return h(FormFactory, { 
+          fields: Fields, 
+          data: this.data, 
+          submitMethod: this.submitMethod ,
+          rules: Rules
+        })
       },
     });
   }

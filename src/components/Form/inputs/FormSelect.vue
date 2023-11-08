@@ -23,6 +23,10 @@ const props = defineProps({
     default: null,
     type: String,
   },
+  prop: {
+    default: null,
+    type: String
+  }
 })
 
 const emit = defineEmits(['update:modelValue'])
@@ -39,7 +43,7 @@ function onInput(event: any) {
 </script>
 
 <template>
-  <el-form-item>
+  <el-form-item :prop="props.prop">
     <el-select 
     :modelValue="props.modelValue"
     placeholder="Select"
