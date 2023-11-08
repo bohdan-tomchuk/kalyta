@@ -1,6 +1,6 @@
 <script lang="ts">
-import TransactionItem from './TransactionItem.ts'
-import { useTransactionsStore } from '@/stores/transactionsStore.ts'
+import TransactionItem from './TransactionItem'
+import { useTransactionsStore } from '@/stores/transactionsStore'
 import { defineComponent, ref } from 'vue'
 import FormDirector from '@/components/Form/FormDirector'
 import FormBuilder from '@/components/Form/FormBuilder'
@@ -42,7 +42,7 @@ export default defineComponent({
       v-model="modal"
       width="30%"
     >
-      <CreateTransactionForm />
+      <CreateTransactionForm :submitMethod="store.createTransaction" />
     </el-dialog>
   </div>
 </template>

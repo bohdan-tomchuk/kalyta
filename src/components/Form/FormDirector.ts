@@ -1,8 +1,6 @@
 import FormInput from './inputs/FormInput.vue'
 import FormSelect from './inputs/FormSelect.vue'
 import type FormBuilder from './FormBuilder'
-import LoginProvider from './providers/LoginProvider.vue'
-import TransactionProvider from './providers/TransactionProvider.vue'
 import type { TransactionUpdate } from '@/types/Transaction';
 
 export default class FormDirector {
@@ -14,7 +12,6 @@ export default class FormDirector {
 
   makeLoginForm() {
     return this.builder
-      .addProvider(LoginProvider)
       .addField({
         component: FormInput,
         name: 'email',
@@ -38,7 +35,6 @@ export default class FormDirector {
 
   makeTransactionForm(mode: 'edit' | 'create', data?: TransactionUpdate) {
     return this.builder
-      .addProvider(TransactionProvider, mode)
       .addField({
         component: FormInput,
         name: 'name',

@@ -4,6 +4,7 @@ import FormBuilder from '@/components/Form/FormBuilder'
 import FormDirector from '@/components/Form/FormDirector'
 import { Edit } from '@element-plus/icons-vue'
 import type { TransactionUpdate } from '@/types/Transaction'
+import { useTransactionsStore } from '@/stores/transactionsStore'
 
 export default defineComponent({
   components: {
@@ -18,7 +19,10 @@ export default defineComponent({
   setup() {
     const modal = ref(false)
 
+    const { editTransaction } = useTransactionsStore()
+
     return {
+      editTransaction,
       modal,
       Edit
     }
@@ -37,7 +41,7 @@ export default defineComponent({
       v-model="modal"
       width="30%"
     >
-      <EditTransactionForm :data="$props.data" />
+      <EditTransactionForm :data="$props.data" :submitMethod="editTransaction" />
     </el-dialog>
   </div>
 </template>

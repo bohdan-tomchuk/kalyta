@@ -17,11 +17,10 @@ export default defineComponent({
       type: Array as PropType<Field[]>,
       default: () => [],
       required: true
-    }
-  },
-  setup() {
-    return {
-      submitMethod: inject<(data: any, id?: string) => Promise<void>>('submitMethod')
+    },
+    submitMethod: {
+      type: Function as PropType<(data: any) => Promise<void>>,
+      required: true
     }
   },
   data(): DataStructure {
@@ -46,7 +45,7 @@ export default defineComponent({
   },
   methods: {
     async submit() {
-      this.submitMethod!(this.values, this.data.id)
+      this.submitMethod(this.values)
     },
     onChangeHandler(payload: any, fieldName: string) {
       this.values[fieldName] = payload
