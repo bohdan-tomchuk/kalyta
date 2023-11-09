@@ -30,6 +30,15 @@ export default class FormDirector {
           value: ''
         }
       })
+      .addRules({
+        email: [
+          { required: true, message: 'Please input email', trigger: 'blur' },
+          { type: 'email', message: 'Please input valid email', trigger: 'blur' }
+        ],
+        password: [
+          { required: true, message: 'Please input password', trigger: 'blur' }
+        ]
+      })
       .build();
   }
 
@@ -65,6 +74,17 @@ export default class FormDirector {
             { label: 'Income', value: 'income' }
           ]
         }
+      })
+      .addRules({
+        name: [
+          { required: true, message: 'Please input name', trigger: 'blur' }
+        ],
+        amount: [
+          { required: true, message: 'Please input amount', trigger: 'blur' }
+        ],
+        type: [
+          { required: true, message: 'Please select type', trigger: 'blur' }
+        ]
       })
       .build();
   }
